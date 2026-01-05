@@ -1,12 +1,14 @@
-// File: components/Categories.js
+// File: components/Categories.tsx
+import Image from 'next/image';
+
 export default function Categories() {
   const categories = [
-    { name: 'Living Room', count: 120 },
-    { name: 'Bedroom', count: 95 },
-    { name: 'Dining & Kitchen', count: 78 },
-    { name: 'Home Appliances', count: 210 },
-    { name: 'Office Furniture', count: 45 },
-    { name: 'Outdoor', count: 32 },
+    { name: 'Living Room', count: 120, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Living%20Room.png' },
+    { name: 'Bedroom', count: 95, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/bedroom.png' },
+    { name: 'Dining & Kitchen', count: 78, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Dining%20&%20Kitchen.png' },
+    { name: 'Home Appliances', count: 210, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Home%20Appliances.jpg' },
+    { name: 'Office Furniture', count: 45, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Office%20Furniture.jpg' },
+    { name: 'Outdoor', count: 32, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Outdoor.png' },
   ];
 
   return (
@@ -28,7 +30,19 @@ export default function Categories() {
               className="bg-amber-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="p-6 flex items-center">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                <div className="relative rounded-xl w-16 h-16 overflow-hidden bg-white">
+                  {category.image ? (
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  ) : (
+                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+                  )}
+                </div>
                 <div className="ml-6">
                   <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
                   <p className="text-amber-700">{category.count} products</p>
