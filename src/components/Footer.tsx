@@ -1,4 +1,6 @@
-// File: components/Footer.js
+// File: components/Footer.tsx
+import Image from 'next/image';
+
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
@@ -7,7 +9,15 @@ export default function Footer() {
 
           <div>
             <div className="flex items-center mb-4">
-              <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12" />
+              <div className="relative w-12 h-12 overflow-hidden rounded-xl bg-white">
+                <Image
+                  src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/logo/logo.jpg"
+                  alt="Murugan Furniture logo"
+                  fill
+                  className="object-contain p-1"
+                  sizes="48px"
+                />
+              </div>
               <h3 className="text-xl font-bold ml-3">Murugan Furniture</h3>
             </div>
             <p className="text-gray-400 mb-4">
@@ -55,7 +65,7 @@ export default function Footer() {
               <input 
                 type="email" 
                 placeholder="Your email" 
-                className="px-4 py-2 w-full sm:flex-1 rounded-lg sm:rounded-r-none text-gray-800 focus:outline-none"
+                className="px-4 py-2 w-full bg-white sm:flex-1 rounded-lg sm:rounded-r-none text-gray-800 focus:outline-none"
               />
               <button className="bg-amber-700 px-4 py-2 rounded-lg sm:rounded-l-none sm:rounded-r-lg hover:bg-amber-800 transition">
                 Subscribe

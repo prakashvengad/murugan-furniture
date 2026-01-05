@@ -10,7 +10,7 @@ export default function Header() {
           <div className="relative w-16 h-16 overflow-hidden rounded-xl bg-white">
 
             <Image
-              src="/logo.png"
+              src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/logo/logo.jpg"
               alt="Murugan Furniture logo"
               fill
               className="object-contain p-1"

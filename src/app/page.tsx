@@ -8,6 +8,7 @@ import Categories from '@/components/Categories';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
+import SearchResults from '@/components/SearchResults';
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
       <Testimonials />
       <Contact />
       <Footer />
+      <SearchResults />
     </div>
   );
 }

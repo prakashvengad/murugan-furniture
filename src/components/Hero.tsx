@@ -1,4 +1,6 @@
-// File: components/Hero.js
+// File: components/Hero.tsx
+import Image from 'next/image';
+
 export default function Hero() {
   return (
     <section className="relative bg-gradient-to-r from-amber-700 to-amber-900 text-white">
@@ -22,7 +24,16 @@ export default function Hero() {
         
         <div className="md:w-1/2 flex justify-center">
           <div className="relative w-full max-w-lg">
-            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-96" />
+            <div className="relative rounded-xl overflow-hidden w-full h-96">
+              <Image
+                src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/homepage/home.png"
+                alt="Murugan Furniture homepage"
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 768px) 100vw, 512px"
+              />
+            </div>
           </div>
         </div>
       </div>
