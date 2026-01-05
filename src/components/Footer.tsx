@@ -1,18 +1,29 @@
-// File: components/Footer.js
+// File: components/Footer.tsx
+import Image from 'next/image';
+
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+
           <div>
             <div className="flex items-center mb-4">
-              <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12" />
+              <div className="relative w-12 h-12 overflow-hidden rounded-xl bg-white">
+                <Image
+                  src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/logo/logo.jpg"
+                  alt="Murugan Furniture logo"
+                  fill
+                  className="object-contain p-1"
+                  sizes="48px"
+                />
+              </div>
               <h3 className="text-xl font-bold ml-3">Murugan Furniture</h3>
             </div>
             <p className="text-gray-400 mb-4">
               Premium furniture and home appliances in Chennai since 1995
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-4">
               {[/* Social icons */].map((_, i) => (
                 <div key={i} className="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center">
                   <div className="bg-gray-200 border-2 border-dashed rounded-xl w-6 h-6" />
@@ -50,13 +61,13 @@ export default function Footer() {
             <p className="text-gray-400 mb-4">
               Subscribe for exclusive offers and new arrivals
             </p>
-            <div className="flex">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input 
                 type="email" 
                 placeholder="Your email" 
-                className="px-4 py-2 w-full rounded-l-lg text-gray-800 focus:outline-none"
+                className="px-4 py-2 w-full bg-white sm:flex-1 rounded-lg sm:rounded-r-none text-gray-800 focus:outline-none"
               />
-              <button className="bg-amber-700 px-4 py-2 rounded-r-lg hover:bg-amber-800 transition">
+              <button className="bg-amber-700 px-4 py-2 rounded-lg sm:rounded-l-none sm:rounded-r-lg hover:bg-amber-800 transition">
                 Subscribe
               </button>
             </div>
