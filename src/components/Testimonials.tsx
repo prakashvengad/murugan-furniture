@@ -23,7 +23,7 @@ export default function Testimonials() {
   ];
 
   // Generate star rating
-  const renderStars = (count) => {
+  const renderStars = (count: number) => {
     return "★".repeat(count) + "☆".repeat(5 - count);
   };
 
@@ -48,7 +48,7 @@ export default function Testimonials() {
               <div className="text-amber-500 text-2xl mb-4">
                 {renderStars(testimonial.rating)}
               </div>
-              <p className="text-gray-600 mb-6 italic">"{testimonial.content}"</p>
+              <p className="text-gray-600 mb-6 italic">&ldquo;{testimonial.content}&rdquo;</p>
               <div className="flex items-center">
                 <div className="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12" />
                 <div className="ml-4">
