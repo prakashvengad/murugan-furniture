@@ -351,121 +351,56 @@ export default function AppliancesPage() {
 
           {/* Products Grid */}
           <div className="flex-1">
-            {/* Sorting and Results Count */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-white p-4 rounded-lg shadow-sm">
-              <p className="text-gray-600 mb-4 md:mb-0">
-                Showing <span className="font-medium">{sortedProducts.length}</span> products
-              </p>
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-600">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="featured">Featured</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Customer Rating</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Products Grid */}
-            {sortedProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedProducts.map(product => (
-                  <div key={product.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-                    <div className="relative">
-                      <div className="h-48 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">Product Image</span>
-                      </div>
-                      {product.isNew && (
-                        <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                          New
-                        </span>
-                      )}
-                      {product.originalPrice && (
-                        <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
-                          Sale
-                        </span>
-                      )}
                     </div>
-                    <div className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-gray-800">{product.name}</h3>
-                        <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs capitalize">
-                          {product.brand}
-                        </span>
+                    {product.isNew && (
+                      <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                        New
+                      </span>
+                    )}
+                    {product.originalPrice && (
+                      <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+                        Sale
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-bold text-gray-800">{product.name}</h3>
+                      <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs capitalize">
+                        {product.brand}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+                    <div className="flex items-center mb-4">
+                      <div className="flex text-yellow-500">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}`} viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
                       </div>
-                      <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-                      <div className="flex items-center mb-4">
-                        <div className="flex text-yellow-500">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}`} viewBox="0 0 20 20" fill="currentColor">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                          ))}
-                        </div>
-                        <span className="text-gray-600 text-sm ml-2">({product.reviewCount})</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          {product.originalPrice ? (
-                            <div className="flex items-center">
-                              <span className="font-bold text-gray-800">${product.price}</span>
-                              <span className="text-gray-500 text-sm line-through ml-2">${product.originalPrice}</span>
-                            </div>
-                          ) : (
+                      <span className="text-gray-600 text-sm ml-2">({product.reviewCount})</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        {product.originalPrice ? (
+                          <div className="flex items-center">
                             <span className="font-bold text-gray-800">${product.price}</span>
-                          )}
-                        </div>
-                        <button className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition">
-                          Add to Cart
-                        </button>
+                            <span className="text-gray-500 text-sm line-through ml-2">${product.originalPrice}</span>
+                          </div>
+                        ) : (
+                          <span className="font-bold text-gray-800">${product.price}</span>
+                        )}
                       </div>
+                      <button className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition">
+                        Add to Cart
+                      </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-white rounded-lg p-8 text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">No products found</h3>
-                <p className="text-gray-600 mb-4">Try adjusting your filters to find what you're looking for.</p>
-                <button 
-                  onClick={() => {
-                    setFilter('all');
-                    setBrandFilter('all');
-                    setPriceRange([0, 3000]);
-                  }}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                >
-                  Reset Filters
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-
-      {/* Features Section */}
-      <section className="bg-white py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Why Choose Our Appliances?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Quality Assurance</h3>
-              <p className="text-gray-600">All our appliances come with extended warranties and quality guarantees.</p>
+                </div>
+              ))}
             </div>
-            <div className="text-center">
+          )}
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
