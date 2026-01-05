@@ -1,6 +1,7 @@
 "use client";
 // File: components/Contact.tsx
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
+import type React from 'react';
 
 interface FormData {
   name: string;
@@ -25,23 +26,41 @@ export default function Contact() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Log form submission with basic info
-    console.log(`Form submitted with method: POST, action: /contact`);
-    
-    // Simulate form submission
-    setTimeout(() => {
+
+    const fullName = formData.name;
+    const { email, phone, message } = formData;
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName,
+          email,
+          phone,
+          message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert('Message sent successfully!');
+        setSubmitSuccess(true);
+        setFormData({ name: '', email: '', phone: '', message: '' });
+        setTimeout(() => setSubmitSuccess(false), 5000);
+      } else {
+        alert('Failed to send message');
+      }
+    } catch {
+      alert('Failed to send message');
+    } finally {
       setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormData({ name: '', email: '', phone: '', message: '' });
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setSubmitSuccess(false), 5000);
-    }, 1500);
-  };
+    }
+  }
  
   return (
     <section id="contact" className="py-16 bg-white">
