@@ -1,6 +1,7 @@
 "use client";
 // components/SearchResults.tsx
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { 
   FiFilter, 
   FiGrid, 
@@ -28,6 +29,11 @@ interface Product {
 }
 
 const SearchResults = () => {
+  const searchParams = useSearchParams();
+  const selectedCategory = useMemo(() => {
+    return searchParams.get('category') || 'Cars';
+  }, [searchParams]);
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popularity');
   const [showFilters, setShowFilters] = useState(false);
@@ -212,7 +218,7 @@ const SearchResults = () => {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-bold text-gray-900">Cars</h1>
+              <h1 className="text-xl font-bold text-gray-900">{selectedCategory}</h1>
               <span className="text-sm text-gray-500">10,000+ products</span>
             </div>
             <div className="flex items-center space-x-4">
@@ -295,7 +301,7 @@ const SearchResults = () => {
               <nav className="text-sm text-gray-500">
                 <span>Home / </span>
                 <span>Search Results / </span>
-                <span className="text-gray-900">Cars</span>
+                <span className="text-gray-900">{selectedCategory}</span>
               </nav>
             </div>
 
@@ -303,7 +309,7 @@ const SearchResults = () => {
             <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">
-                  Showing 1-{products.length} of 10,000+ products for &quot;Cars&quot;
+                  Showing 1-{products.length} of 10,000+ products for &quot;{selectedCategory}&quot;
                 </span>
                 <div className="flex items-center space-x-2">
                   <span className="text-gray-600">Sorted by:</span>

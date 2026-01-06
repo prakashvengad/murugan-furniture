@@ -1,14 +1,15 @@
 // File: components/Categories.tsx
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Categories() {
   const categories = [
-    { name: 'Living Room', count: 120, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Living%20Room.png' },
-    { name: 'Bedroom', count: 95, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/bedroom.png' },
-    { name: 'Dining & Kitchen', count: 78, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Dining%20&%20Kitchen.png' },
-    { name: 'Home Appliances', count: 210, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Home%20Appliances.jpg' },
-    { name: 'Office Furniture', count: 45, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Office%20Furniture.jpg' },
-    { name: 'Outdoor', count: 32, image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Outdoor.png' },
+    { name: 'Living Room', count: 120, href: '/SearchResults?category=Living%20Room', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Living%20Room.png' },
+    { name: 'Bedroom', count: 95, href: '/SearchResults?category=Bedroom', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/bedroom.png' },
+    { name: 'Dining & Kitchen', count: 78, href: '/SearchResults?category=Dining%20%26%20Kitchen', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Dining%20&%20Kitchen.png' },
+    { name: 'Home Appliances', count: 210, href: '/SearchResults?category=Home%20Appliances', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Home%20Appliances.jpg' },
+    { name: 'Office Furniture', count: 45, href: '/SearchResults?category=Office%20Furniture', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Office%20Furniture.jpg' },
+    { name: 'Outdoor', count: 32, href: '/SearchResults?category=Outdoor', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Outdoor.png' },
   ];
 
   return (
@@ -25,8 +26,9 @@ export default function Categories() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category, index) => (
-            <div 
+            <Link
               key={index} 
+              href={category.href}
               className="bg-amber-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="p-6 flex items-center">
@@ -47,13 +49,13 @@ export default function Categories() {
                   <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
                   <p className="text-amber-700">{category.count} products</p>
                 </div>
-                <button className="ml-auto text-amber-700 hover:text-amber-900">
+                <span className="ml-auto text-amber-700 hover:text-amber-900">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </button>
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
