@@ -1,6 +1,7 @@
 "use client";
 // components/SearchResults.tsx
 import React, { useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { 
   FiFilter, 
@@ -146,11 +147,13 @@ const SearchResults = () => {
   const ProductCard = ({ product }: { product: Product }) => (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden group cursor-pointer">
       <div className="relative">
-        <div className="aspect-square overflow-hidden">
-          <img 
-            src={product.image} 
+        <div className="aspect-square overflow-hidden relative">
+          <Image
+            src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            sizes="(max-width: 768px) 100vw, 25vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         </div>
         <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100">

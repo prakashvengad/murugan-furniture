@@ -1,9 +1,9 @@
 "use client";
-
+import { useState } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useMemo, useState, useEffect } from 'react';
+import { Suspense, useMemo, useEffect } from 'react';
 import { createBrowserClient } from '@/utils/supabase/browser';
 import { FaGoogle, FaFacebook, FaEye, FaEyeSlash, FaLock, FaEnvelope } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
