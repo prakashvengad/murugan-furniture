@@ -18,7 +18,15 @@ export default function ProfilePage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const supabase = createBrowserClient();
+    let supabase: ReturnType<typeof createBrowserClient>;
+    try {
+      supabase = createBrowserClient();
+    } catch (e) {
+      console.error(e);
+      setErrorMessage(e instanceof Error ? e.message : 'Failed to initialize Supabase');
+      setIsLoading(false);
+      return;
+    }
 
     async function load() {
       try {
