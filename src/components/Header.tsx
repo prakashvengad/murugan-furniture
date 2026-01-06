@@ -13,7 +13,15 @@ export default function Header() {
   const { open } = useAuthModal();
 
   useEffect(() => {
-    const supabase = createBrowserClient();
+    let supabase: ReturnType<typeof createBrowserClient>;
+    try {
+      supabase = createBrowserClient();
+    } catch (e) {
+      console.error(e);
+      setUserEmail(null);
+      setDisplayName(null);
+      return;
+    }
 
     async function loadProfile(userId: string, fallbackEmail?: string | null, fallbackName?: string | null) {
       try {
@@ -63,7 +71,8 @@ export default function Header() {
     try {
       const supabase = createBrowserClient();
       await supabase.auth.signOut();
-    } catch {
+    } catch (e) {
+      console.error(e);
       alert('Failed to sign out');
     }
   }
