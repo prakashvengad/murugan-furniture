@@ -1,6 +1,9 @@
 import { createClient } from '@/utils/supabase/server';
 import SearchResults from '@/components/SearchResults';
 
+// Force dynamic rendering since this page uses Supabase
+export const dynamic = 'force-dynamic';
+
 export default async function SearchResultsPage({
   searchParams,
 }: {
