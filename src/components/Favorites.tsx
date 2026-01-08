@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fi';
 import Header from './Header';
 import Footer from './Footer';
-import { getFavorites, removeFromFavorites, toggleFavorite } from '../utils/favorites';
+import { getFavorites, toggleFavorite } from '../utils/favorites';
 
 interface Product {
   id: number;
