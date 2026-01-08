@@ -8,6 +8,8 @@ import Categories from '@/components/Categories';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
+import OutdoorPage from './outdoor/page';
+import Outdoor from '@/components/Outdoor';
 
 export default function Home() {
   return (
