@@ -9,6 +9,9 @@ import FeaturedProducts from '@/components/FeaturedProducts';
 import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
 
+// Force dynamic rendering since Categories component uses Supabase
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-amber-50">
