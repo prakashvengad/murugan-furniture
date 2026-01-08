@@ -9,8 +9,7 @@ import {
   FiChevronDown,
   FiStar,
   FiShoppingCart,
-  FiHeart,
-  FiTruck
+  FiHeart
 } from 'react-icons/fi';
 import Header from './Header';
 import Footer from './Footer';
@@ -50,14 +49,6 @@ const SearchResults = ({
     { name: 'Home Appliances', icon: '🔌' },
     { name: 'Office Furniture', icon: '🪑' },
     { name: 'Outdoor', icon: '🌿' }
-  ];
-
-  const filters = [
-    { name: "Category", options: ["Remote Control Cars", "Model Cars", "Car Decor", "Car Accessories", "Apparel", "Home Decor"] },
-    { name: "Price", options: ["Under ₹500", "₹500 - ₹1000", "₹1000 - ₹2000", "Above ₹2000"] },
-    { name: "Discount", options: ["10% and above", "20% and above", "30% and above", "50% and above"] },
-    { name: "Rating", options: ["4★ & above", "3★ & above", "2★ & above"] },
-    { name: "Delivery", options: ["Free Delivery", "Express Delivery"] }
   ];
 
   const sortOptions = [
@@ -242,7 +233,7 @@ const SearchResults = ({
               <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">
-                    Showing 1-{filteredProducts.length} of {filteredProducts.length} products for "{activeCategory}"
+                    Showing 1-{filteredProducts.length} of {filteredProducts.length} products for &quot;{activeCategory}&quot;
                   </span>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
