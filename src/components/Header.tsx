@@ -4,12 +4,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { FiHeart } from 'react-icons/fi';
 import { createBrowserClient } from '@/utils/supabase/browser';
 import { useAuthModal } from '@/components/AuthModalProvider';
+import { getFavorites } from '../utils/favorites';
 
 export default function Header() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string | null>(null);
+  const [favoritesCount, setFavoritesCount] = useState(0);
   const { open } = useAuthModal();
 
   useEffect(() => {
@@ -22,6 +25,19 @@ export default function Header() {
       setDisplayName(null);
       return;
     }
+
+    // Load favorites count
+    const updateFavoritesCount = () => {
+      try {
+        const favorites = getFavorites();
+        setFavoritesCount(favorites.length);
+      } catch (error) {
+        console.error('Error loading favorites count:', error);
+      }
+    };
+
+    updateFavoritesCount();
+    window.addEventListener('storage', updateFavoritesCount);
 
     async function loadProfile(userId: string, fallbackEmail?: string | null, fallbackName?: string | null) {
       try {
@@ -64,6 +80,7 @@ export default function Header() {
 
     return () => {
       subscription.subscription.unsubscribe();
+      window.removeEventListener('storage', updateFavoritesCount);
     };
   }, []);
 
@@ -111,6 +128,20 @@ export default function Header() {
         
         <div className="mt-4 md:mt-0 flex items-center w-full md:w-auto justify-center md:justify-end">
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            {/* Favorites Link */}
+            <Link
+              href="/favorites"
+              className="relative bg-white text-amber-800 px-4 py-2 rounded-lg font-medium hover:bg-amber-100 transition flex items-center justify-center gap-2 w-full sm:w-auto"
+            >
+              <FiHeart className="text-lg" />
+              <span>Favorites</span>
+              {favoritesCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {favoritesCount}
+                </span>
+              )}
+            </Link>
+
             {userEmail ? (
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <Link

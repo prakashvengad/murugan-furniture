@@ -78,25 +78,21 @@ function SignUpInner() {
 
     if (!fullName.trim()) {
       setErrorMessage('Full name is required');
-      clearMessages();
       return;
     }
 
     if (!phone.trim()) {
       setErrorMessage('Phone is required');
-      clearMessages();
       return;
     }
 
     if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters');
-      clearMessages();
       return;
     }
 
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match');
-      clearMessages();
       return;
     }
 
@@ -117,39 +113,29 @@ function SignUpInner() {
       });
 
       if (error) {
-        throw error;
-      }
-
-      if (data.user?.id && data.session) {
-        const { error: profileError } = await supabase.from('user_profiles').upsert(
-          {
-            id: data.user.id,
-            full_name: fullName,
-            phone,
-          },
-          { onConflict: 'id' },
-        );
-
-        if (profileError) {
-          throw profileError;
-        }
+        console.error('Signup error:', error);
+        setErrorMessage(error.message);
+        return;
       }
 
       if (data.session) {
+        // User is signed in immediately
+        console.log('User signed up and signed in:', data.user);
         setSuccessMessage('Account created successfully! Redirecting...');
         setTimeout(() => {
           router.replace(redirectTo);
         }, 1500);
-        return;
+      } else {
+        // Email confirmation required
+        console.log('User signed up, awaiting email confirmation:', data.user);
+        setSuccessMessage('Account created! Please check your email to confirm your account.');
+        setTimeout(() => {
+          router.replace(`/signin?redirectTo=${encodeURIComponent(redirectTo)}`);
+        }, 3000);
       }
-
-      setSuccessMessage('Account created! Please check your email to confirm your account.');
-      setTimeout(() => {
-        router.replace(`/signin?redirectTo=${encodeURIComponent(redirectTo)}`);
-      }, 3000);
     } catch (error: unknown) {
+      console.error('Unexpected error:', error);
       setErrorMessage(getErrorMessage(error));
-      clearMessages();
     } finally {
       setIsSubmitting(false);
     }
