@@ -56,12 +56,6 @@ const Favorites = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const handleRemoveFavorite = (productId: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    removeFromFavorites(productId);
-    setFavorites(prev => prev.filter(product => product.id !== productId));
-  };
-
   const handleToggleFavorite = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
     toggleFavorite(product);
