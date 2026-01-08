@@ -53,21 +53,25 @@ export default function AuthModal() {
       if (mode === 'signup') {
         if (!fullName.trim()) {
           setErrorMessage('Full name is required');
+          setIsSubmitting(false);
           return;
         }
 
         if (!phone.trim()) {
           setErrorMessage('Phone is required');
+          setIsSubmitting(false);
           return;
         }
 
         if (password.length < 6) {
           setErrorMessage('Password must be at least 6 characters');
+          setIsSubmitting(false);
           return;
         }
 
         if (password !== confirmPassword) {
           setErrorMessage('Passwords do not match');
+          setIsSubmitting(false);
           return;
         }
 

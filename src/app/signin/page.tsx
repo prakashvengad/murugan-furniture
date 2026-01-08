@@ -28,6 +28,12 @@ function SignInInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSocialLoading, setIsSocialLoading] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,15 +46,10 @@ function SignInInner() {
     return searchParams.get('redirectTo') || '/';
   }, [searchParams]);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSocialLoading, setIsSocialLoading] = useState<string | null>(null);
-
   async function handleEmailSignIn(e: React.FormEvent) {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(null);
 
     try {
       const supabase = createBrowserClient();
@@ -57,10 +58,18 @@ function SignInInner() {
         password,
       });
 
-      if (error || !data.session) {
-        alert(error?.message || 'Failed to sign in');
+      if (error) {
+        console.error('Sign-in error:', error);
+        setErrorMessage(error.message);
         return;
       }
+
+      if (!data.session) {
+        setErrorMessage('Authentication failed. Please check your credentials.');
+        return;
+      }
+
+      console.log('User signed in successfully:', data.user);
 
       // Success animation
       confetti({
@@ -71,8 +80,9 @@ function SignInInner() {
       });
 
       router.replace(redirectTo);
-    } catch {
-      alert('Failed to sign in');
+    } catch (error: unknown) {
+      console.error('Unexpected sign-in error:', error);
+      setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -80,6 +90,7 @@ function SignInInner() {
 
   async function handleSocialSignIn(provider: 'google' | 'facebook') {
     setIsSocialLoading(provider);
+    setErrorMessage(null);
     
     try {
       const supabase = createBrowserClient();
@@ -91,10 +102,12 @@ function SignInInner() {
       });
 
       if (error) {
-        alert(error.message);
+        console.error('OAuth error:', error);
+        setErrorMessage(error.message);
       }
-    } catch {
-      alert('Failed to sign in with ' + provider);
+    } catch (error: unknown) {
+      console.error('Unexpected OAuth error:', error);
+      setErrorMessage(`Failed to sign in with ${provider}. Please try again.`);
     } finally {
       setIsSocialLoading(null);
     }
@@ -165,6 +178,17 @@ function SignInInner() {
 
             {/* Form */}
             <form onSubmit={handleEmailSignIn} className="px-8 py-8">
+              {/* Error Message */}
+              {errorMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+                >
+                  <p className="text-red-600 text-sm">{errorMessage}</p>
+                </motion.div>
+              )}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
