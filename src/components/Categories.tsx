@@ -1,16 +1,31 @@
 // File: components/Categories.tsx
 import Image from 'next/image';
 import Link from 'next/link';
+import { createClient } from '@/utils/supabase/server';
 
-export default function Categories() {
+export default async function Categories() {
   const categories = [
-    { name: 'Living Room', count: 120, href: '/SearchResults?category=Living%20Room', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Living%20Room.png' },
-    { name: 'Bedroom', count: 95, href: '/SearchResults?category=Bedroom', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/bedroom.png' },
-    { name: 'Dining & Kitchen', count: 78, href: '/SearchResults?category=Dining%20%26%20Kitchen', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Dining%20&%20Kitchen.png' },
-    { name: 'Home Appliances', count: 210, href: '/SearchResults?category=Home%20Appliances', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Home%20Appliances.jpg' },
-    { name: 'Office Furniture', count: 45, href: '/SearchResults?category=Office%20Furniture', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Office%20Furniture.jpg' },
-    { name: 'Outdoor', count: 32, href: '/SearchResults?category=Outdoor', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Outdoor.png' },
+    { name: 'Living Room', href: '/SearchResults?category=Living%20Room', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Living%20Room.png' },
+    { name: 'Bedroom', href: '/SearchResults?category=Bedroom', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/bedroom.png' },
+    { name: 'Dining & Kitchen', href: '/SearchResults?category=Dining%20%26%20Kitchen', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Dining%20&%20Kitchen.png' },
+    { name: 'Home Appliances', href: '/SearchResults?category=Home%20Appliances', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Home%20Appliances.jpg' },
+    { name: 'Office Furniture', href: '/SearchResults?category=Office%20Furniture', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Office%20Furniture.jpg' },
+    { name: 'Outdoor', href: '/SearchResults?category=Outdoor', image: 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/Category/Outdoor.png' },
   ];
+
+  const supabase = await createClient();
+
+  const counts = await Promise.all(
+    categories.map(async (category) => {
+      const { count, error } = await supabase
+        .from('products')
+        .select('id', { count: 'exact', head: true })
+        .eq('category', category.name);
+
+      if (error) return 0;
+      return count ?? 0;
+    }),
+  );
 
   return (
     <section id="categories" className="py-16 bg-white">
@@ -47,7 +62,7 @@ export default function Categories() {
                 </div>
                 <div className="ml-6">
                   <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
-                  <p className="text-amber-700">{category.count} products</p>
+                  <p className="text-amber-700">{counts[index]} products</p>
                 </div>
                 <span className="ml-auto text-amber-700 hover:text-amber-900">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,6 +72,15 @@ export default function Categories() {
               </div>
             </Link>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            href="/Search"
+            className="bg-amber-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-900 transition"
+          >
+            View All Products
+          </Link>
         </div>
       </div>
     </section>

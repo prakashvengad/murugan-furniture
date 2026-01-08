@@ -1,16 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import SearchResults from '@/components/SearchResults';
 
-// Optional: allowed categories (safe & clean)
-const ALLOWED_CATEGORIES = [
-  'Living Room',
-  'Bedroom',
-  'Dining & Kitchen',
-  'Home Appliances',
-  'Office Furniture',
-  'Outdoor',
-];
-
 export default async function SearchResultsPage({
   searchParams,
 }: {
@@ -20,14 +10,14 @@ export default async function SearchResultsPage({
 
   const { category } = await searchParams;
 
-  let query = supabase.from('products').select('*');
+  let productsQuery = supabase.from('products').select('*');
 
-  // ✅ Apply category filter ONLY if it exists and is valid
-  if (category && ALLOWED_CATEGORIES.includes(category)) {
-    query = query.eq('category', category);
+  // ✅ If category exists → filter
+  if (category) {
+    productsQuery = productsQuery.eq('category', category);
   }
 
-  const { data: products, error } = await query;
+  const { data: products, error } = await productsQuery;
 
   if (error) {
     console.error('Error fetching products:', error);
