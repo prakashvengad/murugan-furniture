@@ -17,29 +17,46 @@ const ALLOWED_CATEGORIES = [
 export default async function SearchResultsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; q?: string }>;
 }) {
   const supabase = await createClient();
 
-  const { category } = await searchParams;
+  const { category, q: query } = await searchParams;
 
-  let query = supabase.from('products').select('*');
+  let supabaseQuery = supabase.from('products').select('*');
 
   // ✅ Apply category filter ONLY if it exists and is valid
   if (category && ALLOWED_CATEGORIES.includes(category)) {
-    query = query.eq('category', category);
+    supabaseQuery = supabaseQuery.eq('category', category);
   }
 
-  const { data: products, error } = await query;
+  // ✅ Apply text search filter if query exists
+  if (query && query.trim().length > 0) {
+    supabaseQuery = supabaseQuery.ilike('name', `%${query.trim()}%`);
+  }
+
+  const { data: products, error } = await supabaseQuery;
 
   if (error) {
     console.error('Error fetching products:', error);
   }
 
+  // Determine display title based on search parameters
+  let displayTitle = 'All Categories';
+  if (category && ALLOWED_CATEGORIES.includes(category)) {
+    displayTitle = category;
+  }
+  if (query && query.trim().length > 0) {
+    displayTitle = `Search: "${query.trim()}"`;
+  }
+  if (category && query) {
+    displayTitle = `${category} - Search: "${query.trim()}"`;
+  }
+
   return (
     <SearchResults
       initialProducts={products ?? []}
-      category={category ?? 'All Categories'}
+      category={displayTitle}
     />
   );
 }
