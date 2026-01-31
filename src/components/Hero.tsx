@@ -2,6 +2,8 @@
 import Image from 'next/image';
 
 export default function Hero() {
+  const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images';
+
   return (
     <section className="relative bg-gradient-to-r from-amber-700 to-amber-900 text-white">
       <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-28">
@@ -83,7 +85,7 @@ export default function Hero() {
                 border-8 sm:border-10 border-white/20
               ">
                 <Image
-                  src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/homepage/home.png"
+                  src={`${R2_PUBLIC_URL}/homepage/home.png`}
                   alt="Murugan Furniture homepage - Modern living room furniture"
                   fill
                   className="object-cover"
