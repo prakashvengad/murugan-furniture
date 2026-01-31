@@ -9,7 +9,9 @@ import {
   FiChevronDown,
   FiStar,
   FiShoppingCart,
-  FiHeart
+  FiHeart,
+  FiMenu,
+  FiX
 } from 'react-icons/fi';
 import Header from './Header';
 import Footer from './Footer';
@@ -41,6 +43,8 @@ const SearchResults = ({
   const [activeCategory, setActiveCategory] = useState<string>(selectedCategory || 'Living Room');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const categories = [
     { name: 'Living Room', icon: '🛋️' },
@@ -113,6 +117,7 @@ const SearchResults = ({
       product.category.toLowerCase().includes(categoryName.toLowerCase())
     );
     setFilteredProducts(filtered);
+    setIsMobileMenuOpen(false);
   };
 
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -127,12 +132,13 @@ const SearchResults = ({
             src={getSafeImageSrc(product.image_url)}
             alt={product.name}
             fill
-            sizes="(max-width: 768px) 100vw, 25vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover"
+            priority={false}
           />
         </div>
         <button 
-          className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
+          className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors z-10"
           onClick={(e) => handleFavoriteClick(product, e)}
         >
           <FiHeart 
@@ -141,20 +147,20 @@ const SearchResults = ({
                 ? 'text-red-500 fill-current' 
                 : 'text-gray-600 hover:text-red-500'
             }`} 
+            size={18}
           />
         </button>
         {product.is_new && (
-          <span className="absolute top-2 left-2 bg-amber-800 text-white text-xs px-2 py-1 rounded">
+          <span className="absolute top-2 left-2 bg-amber-800 text-white text-xs px-2 py-1 rounded z-10">
             NEW
           </span>
         )}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-3">
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-3 z-10">
           <span className="text-white text-sm font-medium">View Similar</span>
         </div>
       </div>
 
       <div className="p-4">
-
         <h3 className="text-sm font-medium text-gray-900 line-clamp-1 mb-1">
           {product.name}
         </h3>
@@ -176,14 +182,14 @@ const SearchResults = ({
 
         <div className="flex items-center justify-between">
           <div>
-            <div className="flex items-center">
+            <div className="flex items-center flex-wrap gap-1">
               <span className="text-lg font-bold text-gray-900">₹{product.price}</span>
-              <span className="text-sm text-gray-500 line-through ml-2">₹{product.original_price}</span>
-              <span className="text-sm text-amber-800 font-bold ml-2">{product.discount}% off</span>
+              <span className="text-sm text-gray-500 line-through">₹{product.original_price}</span>
+              <span className="text-sm text-amber-800 font-bold">{product.discount}% off</span>
             </div>
           </div>
           <button className="bg-amber-800 text-white p-2 rounded-full hover:bg-pink-700 transition-colors">
-            <FiShoppingCart />
+            <FiShoppingCart size={18} />
           </button>
         </div>
       </div>
@@ -194,10 +200,49 @@ const SearchResults = ({
     <>
       <Header />
       <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex gap-6">
-            {/* Categories Sidebar */}
-            <div className="w-64 flex-shrink-0">
+        {/* Mobile Categories Toggle Button */}
+        <div className="lg:hidden fixed bottom-4 right-4 z-50">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="bg-amber-800 text-white p-3 rounded-full shadow-lg"
+          >
+            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Categories Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden fixed inset-0 z-40 bg-black/50">
+            <div className="absolute left-0 top-0 bottom-0 w-64 bg-white p-4 overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-bold text-lg">Categories</h2>
+                <button onClick={() => setIsMobileMenuOpen(false)}>
+                  <FiX size={24} />
+                </button>
+              </div>
+              <div className="space-y-2">
+                {categories.map((category) => (
+                  <button
+                    key={category.name}
+                    onClick={() => handleCategoryClick(category.name)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${activeCategory === category.name
+                      ? 'bg-amber-100 text-amber-700 border border-amber-300'
+                      : 'hover:bg-gray-100 text-gray-700'
+                      }`}
+                  >
+                    <span className="text-xl">{category.icon}</span>
+                    <span className="font-medium">{category.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Categories Sidebar - Desktop */}
+            <div className="hidden lg:block w-64 flex-shrink-0">
               <div className="bg-white rounded-lg shadow-sm p-4 sticky top-24">
                 <h2 className="font-bold text-lg mb-6">Categories</h2>
                 <div className="space-y-2">
@@ -218,7 +263,7 @@ const SearchResults = ({
               </div>
             </div>
 
-            {/* Products Grid */}
+            {/* Products Section */}
             <div className="flex-1">
               {/* Breadcrumb */}
               <div className="mb-6">
@@ -231,42 +276,74 @@ const SearchResults = ({
 
               {/* Product Count & Sort Info */}
               <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <span className="text-gray-600 text-sm sm:text-base">
                     Showing 1-{filteredProducts.length} of {filteredProducts.length} products for &quot;{activeCategory}&quot;
                   </span>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    {/* Mobile Sort Controls */}
+                    <div className="lg:hidden flex items-center justify-between gap-2">
+                      <button
+                        onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+                        className="flex items-center space-x-2 px-3 py-2 border border-amber-800 rounded-lg text-sm"
+                      >
+                        <FiFilter className="text-amber-800" />
+                        <span className="text-amber-800">Sort & Filter</span>
+                      </button>
+                      
+                      {/* View Mode Toggle - Mobile */}
+                      <div className="flex items-center border border-amber-800 rounded-lg divide-x">
+                        <button
+                          onClick={() => setViewMode('grid')}
+                          className={`p-2 ${viewMode === 'grid' ? 'bg-amber-100' : ''}`}
+                        >
+                          <FiGrid className="text-amber-800" size={18} />
+                        </button>
+                        <button
+                          onClick={() => setViewMode('list')}
+                          className={`p-2 ${viewMode === 'list' ? 'bg-amber-100' : ''}`}
+                        >
+                          <FiList className="text-amber-800" size={18} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Desktop Sort Controls */}
+                    <div className="hidden lg:flex items-center space-x-4">
                       <button
                         onClick={() => setShowFilters(!showFilters)}
-                        className="flex items-center space-x-2 px-4 py-2 border border-amber-800 rounded-lg hover:bg-"
+                        className="flex items-center space-x-2 px-4 py-2 border border-amber-800 rounded-lg hover:bg-amber-50"
                       >
                         <FiFilter className="text-amber-800" />
                         <span className="text-amber-800">Filters</span>
                       </button>
+                      
+                      {/* View Mode Toggle - Desktop */}
                       <div className="flex items-center border border-amber-800 rounded-lg divide-x">
                         <button
                           onClick={() => setViewMode('grid')}
-                          className={`p-2 ${viewMode === 'grid' ? 'bg-amber-800' : ''}`}
+                          className={`p-2 ${viewMode === 'grid' ? 'bg-amber-100' : ''}`}
                         >
                           <FiGrid className="text-amber-800" />
                         </button>
                         <button
                           onClick={() => setViewMode('list')}
-                          className={`p-2 ${viewMode === 'list' ? 'bg-amber-800' : ''}`}
+                          className={`p-2 ${viewMode === 'list' ? 'bg-amber-100' : ''}`}
                         >
-                          <FiList className="text-amber-800 " />
+                          <FiList className="text-amber-800" />
                         </button>
                       </div>
+                      
+                      {/* Sort Dropdown */}
                       <div className="relative">
                         <select
                           value={sortBy}
                           onChange={(e) => setSortBy(e.target.value)}
-                          className="appearance-none bg-white border border-amber-800 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                          className="appearance-none bg-white border border-amber-800 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base"
                         >
                           {sortOptions.map((option) => (
                             <option key={option.value} value={option.value}>
-                              <span className="text-amber-800"> Sort by: </span> {option.label}
+                              Sort by: {option.label}
                             </option>
                           ))}
                         </select>
@@ -275,15 +352,46 @@ const SearchResults = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Mobile Filter/Sort Dropdown */}
+                {isMobileFilterOpen && (
+                  <div className="lg:hidden mt-4 p-4 border-t border-gray-200">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Sort by
+                        </label>
+                        <div className="space-y-2">
+                          {sortOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              onClick={() => {
+                                setSortBy(option.value);
+                                setIsMobileFilterOpen(false);
+                              }}
+                              className={`w-full text-left px-3 py-2 rounded-lg ${sortBy === option.value
+                                ? 'bg-amber-100 text-amber-700 border border-amber-300'
+                                : 'hover:bg-gray-100 text-gray-700'
+                                }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Products */}
+              {/* Products Grid */}
               <div className={`
-              grid gap-6
-              ${viewMode === 'grid'
+                grid gap-4 sm:gap-6
+                ${viewMode === 'grid'
                   ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                  : 'grid-cols-1'}
-            `}>
+                  : 'grid-cols-1'
+                }
+              `}>
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -291,20 +399,20 @@ const SearchResults = ({
 
               {/* Load More */}
               <div className="mt-8 text-center">
-                <button className="bg-white border border-gray-300 rounded-lg px-8 py-3 hover:bg-gray-50 transition-colors font-medium">
+                <button className="bg-white border border-gray-300 rounded-lg px-6 sm:px-8 py-3 hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base">
                   Load More Products
                 </button>
               </div>
 
               {/* Additional Info */}
-              <div className="mt-12 bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-bold mb-4">Related Searches</h2>
+              <div className="mt-8 sm:mt-12 bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-bold mb-4">Related Searches</h2>
                 <div className="flex flex-wrap gap-2">
                   {['toy cars', 'car accessories', 'car decor', 'rc cars', 'model cars', 'car gifts'].map((tag) => (
                     <a
                       key={tag}
                       href="#"
-                      className="inline-block bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm transition-colors"
+                      className="inline-block bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm transition-colors"
                     >
                       {tag}
                     </a>
@@ -313,8 +421,8 @@ const SearchResults = ({
               </div>
             </div>
           </div>
-        </div >
-      </div >
+        </div>
+      </div>
       <Footer />
     </>
   );

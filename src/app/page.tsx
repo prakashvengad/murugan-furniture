@@ -7,6 +7,7 @@ import Categories from '@/components/Categories';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
+import CardDetails from '@/components/CardDetails';
 
 // Force dynamic rendering since Categories component uses Supabase
 export const dynamic = 'force-dynamic';
