@@ -10,17 +10,13 @@ import {
   FiShare2,
   FiAlertCircle,
   FiChevronRight,
-  FiPlus,
-  FiMinus,
   FiCheck
 } from 'react-icons/fi';
 
 export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-  const [pincode] = useState('');
 
   // Product data
   const product = {
@@ -98,50 +94,6 @@ export default function ProductPage() {
     }
   ];
 
-  const availableSizes = [
-    '6 (Euro 40)',
-    '7 (Euro 41)',
-    '8 (Euro 42)',
-    '9 (Euro 43)',
-    '10 (Euro 44)',
-    '11 (Euro 45)'
-  ];
-
-  const relatedProducts = [
-    {
-      id: 1,
-      name: 'BOLDFIT Men Sports Sandals',
-      price: 699,
-      originalPrice: 1999,
-      discount: 65,
-      image: '/placeholder-related.jpg'
-    },
-    {
-      id: 2,
-      name: 'Nike Men Flip Flops',
-      price: 1299,
-      originalPrice: 2999,
-      discount: 57,
-      image: '/placeholder-related.jpg'
-    },
-    {
-      id: 3,
-      name: 'Adidas Adilette Slides',
-      price: 1499,
-      originalPrice: 3499,
-      discount: 57,
-      image: '/placeholder-related.jpg'
-    },
-    {
-      id: 4,
-      name: 'Puma Men Sandals',
-      price: 899,
-      originalPrice: 1999,
-      discount: 55,
-      image: '/placeholder-related.jpg'
-    }
-  ];
-
   const renderStars = (rating: number) => {
     return [...Array(5)].map((_, i) => (
       <FiStar
@@ -166,7 +118,7 @@ export default function ProductPage() {
             <FiChevronRight className="mx-2" size={14} />
             <a href="#" className="hover:text-amber-700">Footwear</a>
             <FiChevronRight className="mx-2" size={14} />
-            <a href="#" className="hover:text-amber-700">Men's Footwear</a>
+            <a href="#" className="hover:text-amber-700">Men&apos;s Footwear</a>
             <FiChevronRight className="mx-2" size={14} />
             <a href="#" className="hover:text-amber-700">Flip Flops</a>
             <FiChevronRight className="mx-2" size={14} />
