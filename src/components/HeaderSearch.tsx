@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { FiMic, FiSearch, FiLoader } from 'react-icons/fi';
 import { createBrowserClient } from '@/utils/supabase/browser';
+import { useSearch } from '@/contexts/SearchContext';
 
 interface ProductSuggestion {
   id: number;
@@ -21,6 +22,7 @@ export default function HeaderSearch() {
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setIsSearchOverlayOpen } = useSearch();
 
   // Reset search state on route changes
   useEffect(() => {
@@ -93,6 +95,11 @@ export default function HeaderSearch() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Update search overlay state
+  useEffect(() => {
+    setIsSearchOverlayOpen(showDropdown);
+  }, [showDropdown, setIsSearchOverlayOpen]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
@@ -129,9 +136,9 @@ export default function HeaderSearch() {
   };
 
   return (
-    <div className="flex-1 w-full lg:mx-8 relative">
+    <div className="flex-1 min-w-0 max-w-xl lg:mx-8 relative">
       <form onSubmit={handleSubmit} className="relative w-full">
-        <div className="relative flex items-center w-full">
+        <div className="relative flex items-center w-full min-w-0">
           {/* Microphone button on the left */}
           <button
             type="button"
