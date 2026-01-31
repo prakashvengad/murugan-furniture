@@ -1,9 +1,58 @@
 // File: components/Footer.tsx
+"use client";
+
 import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { FiHome, FiHeart, FiUser, FiPhone } from 'react-icons/fi';
+import { createBrowserClient } from '@/utils/supabase/browser';
+import { useAuthModal } from '@/components/AuthModalProvider';
+import { getFavorites } from '../utils/favorites';
+import { useDevice } from '@/hooks/useDevice';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function Footer() {
-  return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
+  const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+  const { isMobile } = useDevice();
+  const { isSearchOverlayOpen } = useSearch();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [favoritesCount, setFavoritesCount] = useState(0);
+  const { open } = useAuthModal();
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const supabase = createBrowserClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserEmail(user.email);
+        setDisplayName(user.user_metadata?.display_name || user.user_metadata?.name || null);
+      }
+    };
+    loadUser();
+
+    const loadFavorites = async () => {
+      const favorites = await getFavorites();
+      setFavoritesCount(favorites.length);
+    };
+    loadFavorites();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      const supabase = createBrowserClient();
+      await supabase.auth.signOut();
+      setUserEmail(null);
+      setDisplayName(null);
+      setFavoritesCount(0);
+    } catch (e) {
+      console.error(e);
+      alert('Failed to sign out');
+    }
+  };
+
+  const DesktopFooter = () => (
+    <footer className="w-full max-w-full overflow-x-hidden bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
 
@@ -11,10 +60,11 @@ export default function Footer() {
             <div className="flex items-center mb-4">
               <div className="relative w-12 h-12 overflow-hidden rounded-xl bg-white">
                 <Image
-                  src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/logo/logo.jpg"
+                  src={`${R2_PUBLIC_URL}/logo/murugan-furniture.png`}
                   alt="Murugan Furniture logo"
-                  fill
-                  className="object-contain p-1"
+                  width={48}
+                  height={48}
+                  className="w-full h-auto object-contain"
                   sizes="48px"
                 />
               </div>
@@ -80,4 +130,37 @@ export default function Footer() {
       </div>
     </footer>
   );
+
+  const MobileFooter = () => (
+    <div className={`fixed bottom-0 left-0 right-0 bg-amber-800 text-white z-60 ${isSearchOverlayOpen ? 'hidden' : ''} md:hidden`}>
+      <div className="flex justify-around items-center py-2">
+        <Link href="/" className="flex flex-col items-center p-2">
+          <FiHome size={24} />
+          <span className="text-xs">Home</span>
+        </Link>
+        <Link href="/favorites" className="flex flex-col items-center p-2 relative">
+          <FiHeart size={24} />
+          <span className="text-xs">Favorites</span>
+          {favoritesCount > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{favoritesCount}</span>}
+        </Link>
+        {userEmail ? (
+          <Link href="/profile" className="flex flex-col items-center p-2">
+            <FiUser size={24} />
+            <span className="text-xs">Profile</span>
+          </Link>
+        ) : (
+          <button onClick={() => open('signin')} className="flex flex-col items-center p-2">
+            <FiUser size={24} />
+            <span className="text-xs">Sign In</span>
+          </button>
+        )}
+        <a href="tel:+919876543210" className="flex flex-col items-center p-2">
+          <FiPhone size={24} />
+          <span className="text-xs">Call</span>
+        </a>
+      </div>
+    </div>
+  );
+
+  return isMobile ? <MobileFooter /> : <DesktopFooter />;
 }
