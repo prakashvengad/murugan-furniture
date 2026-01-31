@@ -4,6 +4,7 @@ import "./globals.css";
 import CookieBanner from "../components/CookieBanner";
 import AuthModalProvider from "../components/AuthModalProvider";
 import AuthModal from "../components/AuthModal";
+import { SearchProvider } from "../contexts/SearchContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,13 +29,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
-        <AuthModalProvider>
-          {children}
-          <AuthModal />
-          <CookieBanner />
-        </AuthModalProvider>
+        <main className="w-full max-w-full overflow-x-hidden pt-20">
+          <SearchProvider>
+            <AuthModalProvider>
+              {children}
+              <AuthModal />
+              <CookieBanner />
+            </AuthModalProvider>
+          </SearchProvider>
+        </main>
       </body>
     </html>
   );
