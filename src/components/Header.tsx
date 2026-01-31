@@ -11,7 +11,7 @@ import { getFavorites } from '../utils/favorites';
 import HeaderSearch from './HeaderSearch';
 
 export default function Header() {
-  const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+  const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images';
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [favoritesCount, setFavoritesCount] = useState(0);
