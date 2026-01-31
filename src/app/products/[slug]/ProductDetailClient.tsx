@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  FiTruck,
   FiRotateCcw,
-  FiCheck,
   FiStar,
   FiShoppingBag,
   FiHeart,
@@ -49,7 +47,7 @@ interface Product {
     rating?: number;
     return_policy?: string;
   };
-  details?: Record<string, any>;
+  details?: Record<string, string | number | boolean>;
   delivery?: {
     estimated_date?: string;
     cutoff_time?: string;
@@ -65,7 +63,6 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product, productImages, relatedProducts }: ProductDetailClientProps) {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('details');

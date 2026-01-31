@@ -4,8 +4,6 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiHeart, FiShoppingCart, FiPhone, FiMessageCircle, FiMinus, FiPlus, FiStar, FiTruck, FiShield, FiRefreshCw } from 'react-icons/fi';
-import { useAuthModal } from '@/components/AuthModalProvider';
-import { getFavorites } from '@/utils/favorites';
 
 interface ProductImage {
   id: number;
@@ -38,7 +36,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { open } = useAuthModal();
 
   const images = product.product_images || [];
   const selectedImage = images[selectedImageIndex];
@@ -268,7 +265,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   Call Us
                 </a>
                 <a
-                  href="https://wa.me/919876543210?text=Hi%2C%20I'm%20interested%20in%20this%20product"
+                  href="https://wa.me/919876543210?text=Hi%2C%20I&apos;m%20interested%20in%20this%20product"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center py-3 px-4 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"

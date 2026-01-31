@@ -3,26 +3,20 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import {
-  FiTruck,
   FiRotateCcw,
-  FiCheck,
   FiStar,
   FiShoppingBag,
   FiHeart,
   FiShare2,
   FiAlertCircle,
   FiChevronRight,
-  FiPlus,
-  FiMinus
+  FiCheck
 } from 'react-icons/fi';
 
 export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-  const [pincode, setPincode] = useState('');
 
   // Product data
   const product = {
@@ -100,50 +94,6 @@ export default function ProductPage() {
     }
   ];
 
-  const availableSizes = [
-    '6 (Euro 40)',
-    '7 (Euro 41)',
-    '8 (Euro 42)',
-    '9 (Euro 43)',
-    '10 (Euro 44)',
-    '11 (Euro 45)'
-  ];
-
-  const relatedProducts = [
-    {
-      id: 1,
-      name: 'BOLDFIT Men Sports Sandals',
-      price: 699,
-      originalPrice: 1999,
-      discount: 65,
-      image: '/placeholder-related.jpg'
-    },
-    {
-      id: 2,
-      name: 'Nike Men Flip Flops',
-      price: 1299,
-      originalPrice: 2999,
-      discount: 57,
-      image: '/placeholder-related.jpg'
-    },
-    {
-      id: 3,
-      name: 'Adidas Adilette Slides',
-      price: 1499,
-      originalPrice: 3499,
-      discount: 57,
-      image: '/placeholder-related.jpg'
-    },
-    {
-      id: 4,
-      name: 'Puma Men Sandals',
-      price: 899,
-      originalPrice: 1999,
-      discount: 55,
-      image: '/placeholder-related.jpg'
-    }
-  ];
-
   const renderStars = (rating: number) => {
     return [...Array(5)].map((_, i) => (
       <FiStar
@@ -154,28 +104,8 @@ export default function ProductPage() {
     ));
   };
 
-  const handleCheckDelivery = () => {
-    if (pincode.length === 6) {
-      alert(`Delivery available to ${pincode} by ${product.delivery.estimatedDate}`);
-    } else {
-      alert('Please enter a valid 6-digit pincode');
-    }
-  };
-
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      alert('Please select a size first');
-      return;
-    }
-    alert(`Added ${quantity} x ${product.name} (Size: ${selectedSize}) to cart!`);
-  };
-
-  const handleBuyNow = () => {
-    if (!selectedSize) {
-      alert('Please select a size first');
-      return;
-    }
-    alert(`Proceeding to buy ${quantity} x ${product.name} (Size: ${selectedSize})`);
+    alert('Please select a size first');
   };
 
   return (
@@ -188,7 +118,7 @@ export default function ProductPage() {
             <FiChevronRight className="mx-2" size={14} />
             <a href="#" className="hover:text-amber-700">Footwear</a>
             <FiChevronRight className="mx-2" size={14} />
-            <a href="#" className="hover:text-amber-700">Men's Footwear</a>
+            <a href="#" className="hover:text-amber-700">Men&apos;s Footwear</a>
             <FiChevronRight className="mx-2" size={14} />
             <a href="#" className="hover:text-amber-700">Flip Flops</a>
             <FiChevronRight className="mx-2" size={14} />
@@ -343,21 +273,12 @@ export default function ProductPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={handleAddToCart}
-                  disabled={!selectedSize}
-                  className={`flex-1 py-4 px-6 rounded-lg font-bold text-lg transition-all ${!selectedSize
-                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    : 'bg-amber-100 text-amber-800 hover:bg-amber-200 hover:shadow-md'
-                    }`}
+                  className={`flex-1 py-4 px-6 rounded-lg font-bold text-lg transition-all bg-gray-200 text-gray-500 cursor-not-allowed`}
                 >
                   ADD TO CART
                 </button>
                 <button 
-                  onClick={handleBuyNow}
-                  disabled={!selectedSize}
-                  className={`flex-1 py-4 px-6 rounded-lg font-bold text-lg transition-all ${!selectedSize
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-amber-700 text-white hover:bg-amber-800 hover:shadow-md'
-                    }`}
+                  className={`flex-1 py-4 px-6 rounded-lg font-bold text-lg transition-all bg-gray-300 text-gray-500 cursor-not-allowed`}
                 >
                   <div className="flex items-center justify-center">
                     <FiShoppingBag className="mr-3" size={20} />
