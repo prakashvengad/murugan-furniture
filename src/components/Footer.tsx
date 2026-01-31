@@ -16,7 +16,6 @@ export default function Footer() {
   const { isMobile } = useDevice();
   const { isSearchOverlayOpen } = useSearch();
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(null);
   const [favoritesCount, setFavoritesCount] = useState(0);
   const { open } = useAuthModal();
 
@@ -25,8 +24,7 @@ export default function Footer() {
       const supabase = createBrowserClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        setUserEmail(user.email);
-        setDisplayName(user.user_metadata?.display_name || user.user_metadata?.name || null);
+        setUserEmail(user.email ?? null);
       }
     };
     loadUser();
@@ -43,7 +41,6 @@ export default function Footer() {
       const supabase = createBrowserClient();
       await supabase.auth.signOut();
       setUserEmail(null);
-      setDisplayName(null);
       setFavoritesCount(0);
     } catch (e) {
       console.error(e);
