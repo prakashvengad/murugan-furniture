@@ -11,6 +11,7 @@ import { getFavorites } from '../utils/favorites';
 import HeaderSearch from './HeaderSearch';
 
 export default function Header() {
+  const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [favoritesCount, setFavoritesCount] = useState(0);
@@ -101,9 +102,9 @@ export default function Header() {
         <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-0">
           {/* Logo Section - Left */}
           <div className="flex items-center flex-shrink-0">
-            <div className="relative w-16 h-16 overflow-hidden rounded-xl bg-white">
+            <div className="relative w-16 h-16 overflow-hidden rounded-full bg-white">
               <Image
-                src="https://ztoiiepzhkdyjuljyqyz.supabase.co/storage/v1/object/public/product-images/logo/logo.jpg"
+                src={`${R2_PUBLIC_URL}/logo/murugan-furniture.png`}
                 alt="Murugan Furniture logo"
                 fill
                 className="object-contain p-1"
