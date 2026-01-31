@@ -25,7 +25,7 @@ interface Product {
     rating?: number;
     return_policy?: string;
   };
-  details?: Record<string, any>;
+  details?: Record<string, string | number | boolean>;
   delivery?: {
     estimated_date?: string;
     cutoff_time?: string;
