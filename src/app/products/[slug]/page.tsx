@@ -11,7 +11,7 @@ interface Product {
   price: number;
   original_price?: number;
   discount?: number;
-  category: string;
+  category?: string;
   brand?: string;
   color?: string;
   ideal_for?: string;
@@ -138,7 +138,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   }
 
   const productImages = await getProductImages(product.id);
-  const relatedProducts = await getRelatedProducts(product.category, product.id);
+  const relatedProducts = await getRelatedProducts(product.category || '', product.id);
 
   return (
     <ProductDetailClient 
