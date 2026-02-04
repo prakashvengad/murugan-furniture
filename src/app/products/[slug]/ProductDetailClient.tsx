@@ -11,10 +11,10 @@ import {
   FiShare2,
   FiAlertCircle,
   FiChevronRight,
-  FiPlus,
-  FiMinus,
   FiPhone,
-  FiMessageCircle
+  FiMessageCircle,
+  FiMinus,
+  FiPlus
 } from 'react-icons/fi';
 
 interface ProductImage {
@@ -33,7 +33,7 @@ interface Product {
   price: number;
   original_price?: number;
   discount?: number;
-  category: string;
+  category?: string;
   brand?: string;
   color?: string;
   ideal_for?: string;
@@ -66,7 +66,6 @@ export default function ProductDetailClient({ product, productImages, relatedPro
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
-  const [pincode, setPincode] = useState('');
 
   // Get all available images (fallback to main image if no gallery images)
   const allImages = productImages.length > 0 
@@ -85,13 +84,6 @@ export default function ProductDetailClient({ product, productImages, relatedPro
     ));
   };
 
-  const handleCheckDelivery = () => {
-    if (pincode.length === 6) {
-      alert(`Delivery available to ${pincode} by ${product.delivery?.estimated_date || '3-5 business days'}`);
-    } else {
-      alert('Please enter a valid 6-digit pincode');
-    }
-  };
 
   const handleAddToCart = () => {
     if (product.stock_count === 0) {
@@ -130,10 +122,14 @@ export default function ProductDetailClient({ product, productImages, relatedPro
           <nav className="flex items-center text-sm text-gray-600">
             <Link href="/" className="hover:text-amber-700">Home</Link>
             <FiChevronRight className="mx-2" size={14} />
-            <Link href={`/categories/${product.category.toLowerCase()}`} className="hover:text-amber-700">
-              {product.category}
-            </Link>
-            <FiChevronRight className="mx-2" size={14} />
+            {product.category && (
+              <>
+                <Link href={`/categories/${product.category.toLowerCase()}`} className="hover:text-amber-700">
+                  {product.category}
+                </Link>
+                <FiChevronRight className="mx-2" size={14} />
+              </>
+            )}
             <span className="text-gray-900 font-medium truncate">{product.name}</span>
           </nav>
         </div>
@@ -254,8 +250,8 @@ export default function ProductDetailClient({ product, productImages, relatedPro
                   </>
                 )}
               </div>
-              {product.stock_count > 0 ? (
-                <p className="text-green-600 font-medium mt-2">In stock - {product.stock_count} units available</p>
+              {(product.stock_count || 0) > 0 ? (
+                <p className="text-green-600 font-medium mt-2">In stock - {product.stock_count || 0} units available</p>
               ) : (
                 <p className="text-red-600 font-medium mt-2">Out of stock</p>
               )}
@@ -283,29 +279,16 @@ export default function ProductDetailClient({ product, productImages, relatedPro
               </div>
             </div>
 
-            {/* Delivery Check */}
+            {/* Delivery Info */}
             <div className="bg-white rounded-lg border shadow-sm p-6">
               <h3 className="font-bold text-lg mb-4">Delivery</h3>
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  placeholder="Enter pincode"
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  maxLength={6}
-                />
-                <button
-                  onClick={handleCheckDelivery}
-                  className="px-6 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800"
-                >
-                  Check
-                </button>
-              </div>
               {product.delivery?.estimated_date && (
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600">
                   Estimated delivery by {product.delivery.estimated_date}
                 </p>
+              )}
+              {product.delivery?.cod_available && (
+                <p className="text-sm text-green-600 mt-2">Cash on delivery available</p>
               )}
             </div>
 
