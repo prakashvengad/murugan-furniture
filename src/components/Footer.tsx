@@ -36,18 +36,6 @@ export default function Footer() {
     loadFavorites();
   }, []);
 
-  const handleSignOut = async () => {
-    try {
-      const supabase = createBrowserClient();
-      await supabase.auth.signOut();
-      setUserEmail(null);
-      setFavoritesCount(0);
-    } catch (e) {
-      console.error(e);
-      alert('Failed to sign out');
-    }
-  };
-
   const DesktopFooter = () => (
     <footer className="w-full max-w-full overflow-x-hidden bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
